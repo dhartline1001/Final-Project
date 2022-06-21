@@ -23,7 +23,14 @@ lvl3_slowed = ['slowdemeanor.mp3', 'slowmorbidity.mp3', 'slowtorturous.mp3', 'sl
 lvl4_slowed = ['slowaccumulate.mp3', 'slowbiographical.mp3', 'slowchrysanthemum.mp3', 'slowflamboyant.mp3', 'slowdiscrepancy.mp3', 'slowmalignant.mp3', 'slowgrotesque.mp3', 'slowinevitable.mp3', 'slowlieutenant.mp3', 'slownostalgia.mp3'] 
 lvl5_slowed= ['slowfallacious.mp3', 'slowatrophy.mp3', 'slowautonomous.mp3', 'slowconcierge.mp3', 'slowknickknack.mp3', 'slownarcissus.mp3', 'slowoxymoron.mp3', 'slowneurosis.mp3', 'slowparallelogram.mp3', 'slowdisenfranchise.mp3']
 ###################
-       
+
+# commands for gui
+def play():
+    for i in lvl1:
+        return playsound.playsound(i)
+
+####
+
 ws = Tk()
 ws.title('FreeBee')
 
@@ -41,15 +48,12 @@ enter = Button(ws, text='Enter', command=None)
 enter.grid(row=4, column=2)
 
 #command will play slowed word
-slow = Button(ws, text='slow word down', command=None)
+slow = Button(ws, text='slow word down', command= temp.playslow())
 slow.grid(row=2, rowspan=2, column=2, sticky=NS)
 
 #will play the word
-repeat = Button(ws, text='play word', command= play)
+repeat = Button(ws, text='play word', command= temp.play())
 repeat.grid(row=0, rowspan=2, column=2, sticky=NS)
 
 
-def play():
-    
-    return playsound.playsound(i)
 
