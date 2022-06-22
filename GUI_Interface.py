@@ -29,6 +29,17 @@ def play():
     for i in lvl1:
         return playsound.playsound(i)
 
+def play_slow():
+    for i in lvl1_slowed:
+        return playsound.playsound(i)
+def enter():
+    i=0
+    guess = wordbox.get()
+    if words1[i] == guess:
+        i += 1
+        return "correct!"
+    else:
+        return "try again"
 ####
 
 ws = Tk()
@@ -44,16 +55,15 @@ wordbox = Entry(ws)
 wordbox.grid(row=4, column=1, sticky=EW)
 
 #command will become the spell check
-enter = Button(ws, text='Enter', command=None)
+enter = Button(ws, text='Enter', command=enter)
 enter.grid(row=4, column=2)
 
 #command will play slowed word
-slow = Button(ws, text='slow word down', command= temp.playslow())
+slow = Button(ws, text='slow word down', command= play_slow)
 slow.grid(row=2, rowspan=2, column=2, sticky=NS)
 
 #will play the word
-repeat = Button(ws, text='play word', command= temp.play())
+repeat = Button(ws, text='play word', command= play)
 repeat.grid(row=0, rowspan=2, column=2, sticky=NS)
-
 
 
