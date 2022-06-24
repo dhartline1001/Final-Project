@@ -1,7 +1,9 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import pygame
-from random import randint, choice
+from random import randint
+
+game = False
 
 #initialize the pygame library
 pygame.init()
@@ -10,7 +12,7 @@ pygame.init()
 #LEDS from left to right
 leds = [6, 13, 19, 21]
 #switches from left to right
-switches = [20, 16, 12, 26]
+switches = [26, 12, 16, 20]
 #the sounds that map to each LED (from left to right)
 sounds = [pygame.mixer.Sound("one.wav"), pygame.mixer.Sound("two.wav"),pygame.mixer.Sound("three.wav"), pygame.mixer.Sound("four.wav")]
 
@@ -21,108 +23,88 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(leds, GPIO.OUT)
 GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-choices = []
-led = choice(leds)
-choices.append(led)
+#got these from Eboni and Alex
+def LED_ON():
+    for i in leds:
+        GPIO.output(leds, True)
+        
+def LED_OFF():
+    for i in leds:
+        GPIO.output(leds, False)
+        
+def lose():
+    for i in range(0, 4):
+        leds_on()
+        sleep(0.5)
+        leds_off()
+        sleep(0.5)
+        
+####### MAIN #######
 
-for i in range(len(choices)):
-    GPIO.output(choices[i], True)
-    sounds[i].play()
-    sleep(1)
-    GPIO.output(choices[i], False)
-    sleep(0.5)
+pattern = []
 
+print("welcome to simon")
+print ("try to play the patternuence back by pressing the switches")
 
-### MAIN PROGRAM ###game = True
-# pattern = []
-# player = []
-# levels = 1
-# while game:
-# for i in levels:
-#     pattern.append(choice(leds))
-#     
-# for x in pattern:
-#     GPIO.output(leds[x], GPIO.HIGH)
-#     sleep(1)
-#     GPIO.output(leds[x], GPIO.LOW)
-#     sleep(0.5)
-#         
-# while len(player) < 3:
-#     sleep(0.3)
-#         redbuttonstate = GPIO.input(20)
-#         bluebuttonstate = GPIO.input(16)
-#         yellowbuttonstate = GPIO.input(12)
-#         greenbuttonstate = GPIO.input(26)
-#             
-#         if redbuttonstate == 0:
-#             GPIO.output(6, GPIO.HIGH)
-#             waitingforinput = False
-#             if x != 0:
-#                 game = False
-#             sleep(1)
-#             GPIO.output(6, GPIO.LOW)
-#         if bluebuttonstate == 0:
-#             GPIO.output(13, GPIO.HIGH)
-#             waitingforinput = False
-#             if x != 0:
-#                 game = False
-#             sleep(1)
-#             GPIO.output(13, GPIO.LOW)
-#         if yellowbuttonstate == 0:
-#             GPIO.output(19, GPIO.HIGH)
-#             waitingforinput = False
-#             if x != 0:
-#                 game = False
-#             sleep(1)
-#             GPIO.output(19, GPIO.LOW)
-#         if greenbuttonstate == 0:
-#             GPIO.output(21, GPIO.HIGH)
-#             waitingforinput = False
-#             if x != 0:
-#                 game = False
-#             sleep(1)
-#             GPIO.output(21, GPIO.LOW)
-#             
-#             
-# 
-# 
-# #### testing code #####
-# # print("Watch the LEDs light with sound!")
-# # for i in range(len(leds)):
-# #     #light the current LED
-# #     GPIO.output(leds[i], True)
-# #     # plays corresponding sound
-# #     sounds[i].play()
-# #     #wait a bit, then turn the LED off
-# #     sleep(1)
-# #     GPIO.output(leds[i], False)
-# #     sleep(0.5)
-# # 
-# # print("Bye!")
-# # GPIO.cleanup()
-# ###############
-# 
-# # print("Press the switches or Ctrl+C to exit")
-# # try:
-# #     while (True): #keeps going until quit
-# #         pressed = False
-# #         #so long as no switch is currently pressed
-# #         while (not pressed):
-# #             #we can check the status of each switch
-# #             for i in range(len(switches)):
-# #                 #if one switch is pressed
-# #                 while (GPIO.input(switches[i]) == True):
-# #                     #note its index and that somethings pressed
-# #                     val = i
-# #                     pressed = True
-# #         #do light and sound
-# #         GPIO.output(leds[val], True)
-# #         sounds[val].play()
-# #         sleep(1)
-# #         GPIO.output(leds[val], False)
-# #         sleep(0.25)
-# # except KeyboardInterrupt: #ctrl-c to end game
-# #     GPIO.cleanup()
-# #     print("\nBye!")
-# 
+try:
+    while (True):
+        #from here to line 81 Eboni and Alex helped with reformatting our previous code
+        #ex. if statements and switch_count
+        pattern.append(randint(0, 3))
+        if (game):
+            if (len(pattern) > 3):
+                print()
+            print("pattern = {}".format(pattern))
+        if len(pattern) < 6:
+            for s in pattern:
+                GPIO.output(leds[s], True)
+                sounds[s].play()
+                sleep(1)
+                GPIO.output(leds[s], False)
+                sleep(0.5)
+            switch_count = 0
+        elif len(pattern) >= 6 and len(pattern) <= 15:
+            for s in pattern:
+                GPIO.output(leds[s], True)
+                sounds[s].play()
+                sleep(0.5)
+                GPIO.output(leds[s], False)
+                sleep(0.5)
+            switch_count = 0
+        else:
+            for i in range(0, 13):
+                GPIO.output(leds[s], False)
+                sounds[s].play()
+                sleep(0.5)
+                GPIO.output(leds[s], False)
+                slep(0.5)
+            switch_count = 0
+        while (switch_count < len(pattern)):
+            pressed = False
+            while (not pressed):
+                for i in range(len(switches)):
+                    while (GPIO.input(switches[i])):
+                        val = i
+                        pressed = True
+#lines 90 - 104, Eboni ad Alex helped us rearrange code from class
+            if (game):
+                print(val)
+            GPIO.output(leds[val], True)
+            sounds[val].play()
+            sleep(1)
+            GPIO.output(leds[val], False)
+            sleep(0.25)
+            
+            if (val != pattern[switch_count]):
+                score = len(pattern)
+                print ("Congrats youve made it to level {}".format(score))
+                lose()
+                GPIO.cleanup()
+                exit(0)
+            switch_count += 1
+except KeyboardInterrupt: #ctrl-c to end game
+    GPIO.cleanup()
+    print("\n Bye")
+
+# Eboni and Alex helped us understand what the code was doing in the sections they helped with
 # 
