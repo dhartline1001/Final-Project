@@ -24,28 +24,62 @@ lvl4_slowed = ['slowaccumulate.mp3', 'slowbiographical.mp3', 'slowchrysanthemum.
 lvl5_slowed= ['slowfallacious.mp3', 'slowatrophy.mp3', 'slowautonomous.mp3', 'slowconcierge.mp3', 'slowknickknack.mp3', 'slownarcissus.mp3', 'slowoxymoron.mp3', 'slowneurosis.mp3', 'slowparallelogram.mp3', 'slowdisenfranchise.mp3']
 ###################
 
+words = 0
+if words <= 9:
+    level = lvl1
+elif (words > 9) and (words <=19):
+    level = lvl2
+elif (words > 19) and (words <=29):
+    level = lvl3
+elif (words > 29) and (words <=39):
+    level = lvl4
+else:
+    level = lvl5
+wordss = 0
+if wordss <= 9:
+    levels = lvl1
+elif (wordss > 9) and (wordss <=19):
+    levels = lvl2
+elif (wordss > 19) and (wordss <=29):
+    levels = lvl3
+elif (wordss > 29) and (wordss <=39):
+    levels = lvl4
+else:
+    levels = lvl5
+
 # commands for gui
 def play():
-    for i in lvl1:
-        return playsound.playsound(i)
-
+    for word in level:
+        global words
+        words += 1
+        return playsound.playsound(word)
 def play_slow():
-    for i in lvl1_slowed:
-        return playsound.playsound(i)
+    for word in levels:
+        global wordss
+        wordss += 1
+        return playsound.playsound(word)   
 def enter():
     i=0
     guess = wordbox.get()
     if words1[i] == guess:
         i += 1
-        return "correct!"
+        return next
     else:
-        return "try again"
+        return end
+
+def next():
+    break
+
+def end():
+    break
+
+
 ####
 
 ws = Tk()
 ws.title('FreeBee')
 
-pic = PhotoImage(file="bee.png")
+pic = PhotoImage(file="beeee.gif")
 image = Label(ws, image=pic)
 image.grid(row=0, rowspan=4, column=0, columnspan=2)
 
@@ -60,10 +94,10 @@ enter.grid(row=4, column=2)
 
 #command will play slowed word
 slow = Button(ws, text='slow word down', command= play_slow)
-slow.grid(row=2, rowspan=2, column=2, sticky=NS)
+slow.grid(row=2, rowspan= 2, column=2, sticky=NS)
 
 #will play the word
 repeat = Button(ws, text='play word', command= play)
 repeat.grid(row=0, rowspan=2, column=2, sticky=NS)
 
-
+ws.mainloop()
