@@ -13,32 +13,39 @@ audio_slowed = ['slowshoes.mp3', 'slowmask.mp3', 'slowupon.mp3', 'slowlisp.mp3',
 
 i = 0
 score = 0
-
+attempt = 0
 # commands for gui
 def play():
-    for a in audio:
-        return playsound.playsound(a)
+    global audio
+    global i
+    return playsound.playsound(audio[i])
 def play_slow():
-    for s in audio_slowed:
-        return playsound.playsound(s)
+    global audio_slowed
+    global i
+    return playsound.playsound(audio_slowed[i])
 def enter():
+    global i
+    global score
     guess = wordbox.get()
     guess.lower()
     guess.rstrip("\n")
-    if guess in words:
-        global i
-        global score
+    if guess == words[i]:
         i += 1
         score += 1
-        return scoreboard.itemconfig(s, text=score)
+        return scoreboard.itemconfig(s, text=("Score:", score))
     else:
-        return end
+        global attempt
+        attempt += 1
+        attempts.itemconfig(a, text=("Attempts:", attempt))
+        if attempt == 4:
+            return end()
 
 def end():
-    global score
     score = 0
-    scoreboard.itemconfig(s, text=score)
-    return wordbox.delete()
+    attempt = 0
+    attempts.itemconfig(a, text=("Attempts:", attempt))
+    scoreboard.itemconfig(s, text=("Score:",score))
+    return ws.destroy()
 
 
 ####
@@ -48,28 +55,33 @@ ws.title('FreeBee')
 
 pic = PhotoImage(file="beeee.gif")
 image = Label(ws, image=pic)
-image.grid(row=0, rowspan=4, column=0, columnspan=2)
+image.grid(row=0, rowspan=5, column=0, columnspan=2)
 
 word = Label(ws, text='enter word here:', bg='yellow')
-word.grid(row=4, column=0)
+word.grid(row=5, column=0)
 wordbox = Entry(ws)
-wordbox.grid(row=4, column=1, sticky=EW)
+wordbox.grid(row=5, column=1, sticky=EW)
 
 #command will become the spell check
 enter = Button(ws, text='Enter', command=enter)
-enter.grid(row=4, column=2)
+enter.grid(row=5, column=2)
 
 #command will play slowed word
 slow = Button(ws, text='slow word down', command= play_slow)
-slow.grid(row=3, column=2, sticky=NS)
+slow.grid(row=4, column=2, sticky=NS)
 
 #will play the word
 repeat = Button(ws, text='play word', command= play)
-repeat.grid(row=2, column=2, sticky=NS)
+repeat.grid(row=3, column=2, sticky=NS)
 
 #shows number of points
-scoreboard = Canvas(ws, width=100, height=100, bg='yellow')
-s = scoreboard.create_text(50, 50, text=("Score:", score))
+scoreboard = Canvas(ws, width=100, height=50, bg='yellow')
+s = scoreboard.create_text(50, 25, text=("Score:", score))
 scoreboard.grid(row=0, column=2)
+
+#shows number of attempts
+attempts = Canvas(ws, width=100, height=50, bg='yellow')
+a = attempts.create_text(50, 25, text=("Attempts:", attempt))
+attempts.grid(row=1, column=2)
 
 ws.mainloop()
