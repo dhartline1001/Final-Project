@@ -1,6 +1,6 @@
 from tkinter import *
 from random import choice
-import playsound
+import pygame.mixer
 
 class Word:
     def __init__(self, t, a, s, l):
@@ -39,9 +39,9 @@ class Word:
         else:
             return False
     def play(self):
-        return playsound.playsound(self._audio)
+        return pygame.mixer.pygame.mixer(self._audio)
     def playslow(self):
-        return playsound.playsound(self._slow)
+        return pygame.mixer.pygame.mixer(self._slow)
     def __eq__(self, other):
         if self.text == other:
             return True
@@ -84,7 +84,7 @@ ws.title('FreeBee')
 
 pic = PhotoImage(file="bee.png")
 image = Label(ws, image=pic)
-image.grid(row=0, rowspan=4, column=0, columnspan=2)
+image.grid(row=0, rowspan=2, column=0, columnspan=1)
 
 word = Label(ws, text='enter word here:', bg='yellow')
 word.grid(row=4, column=0)
@@ -97,11 +97,11 @@ enter.grid(row=4, column=2)
 
 #command will play slowed word
 slow = Button(ws, text='slow word down', command= temp.playslow())
-slow.grid(row=2, rowspan=2, column=2, sticky=NS)
+slow.grid(row=2, rowspan=1, column=2)
 
 #will play the word
 repeat = Button(ws, text='play word', command= temp.play())
 repeat.grid(row=0, rowspan=2, column=2, sticky=NS)
 
-while self._level == '1':
+#while self._level == '1':
     
