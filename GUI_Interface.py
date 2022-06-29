@@ -14,15 +14,18 @@ audio_slowed = ['slowshoes.mp3', 'slowmask.mp3', 'slowupon.mp3', 'slowlisp.mp3',
 i = 0
 score = 0
 attempt = 0
-# commands for gui
+
+#iterates through regular audio
 def play():
     global audio
     global i
     return playsound.playsound(audio[i])
+#iterated through slowed audio
 def play_slow():
     global audio_slowed
     global i
     return playsound.playsound(audio_slowed[i])
+#spell checks the entry
 def enter():
     global i
     global score
@@ -31,32 +34,40 @@ def enter():
     guess.rstrip("\n")
     if guess == words[i]:
         i += 1
+        #adds score to gui
         score += 1
         return scoreboard.itemconfig(s, text=("Score:", score))
     else:
         global attempt
+        #adds attempts
         attempt += 1
         attempts.itemconfig(a, text=("Attempts:", attempt))
+        #kills game if there are 3 attempts
+        #we have 4 so the player can see the attempts and score cleared
         if attempt == 4:
             return end()
 
 def end():
+    #clears scores and attempts
     score = 0
     attempt = 0
     attempts.itemconfig(a, text=("Attempts:", attempt))
     scoreboard.itemconfig(s, text=("Score:",score))
+    #ends game
     return ws.destroy()
 
 
-####
+#### GUI codes
 
 ws = Tk()
 ws.title('FreeBee')
 
+#cute bee picture
 pic = PhotoImage(file="beeee.gif")
 image = Label(ws, image=pic)
 image.grid(row=0, rowspan=5, column=0, columnspan=2)
 
+#input section
 word = Label(ws, text='enter word here:', bg='yellow')
 word.grid(row=5, column=0)
 wordbox = Entry(ws)
@@ -84,4 +95,5 @@ attempts = Canvas(ws, width=100, height=50, bg='yellow')
 a = attempts.create_text(50, 25, text=("Attempts:", attempt))
 attempts.grid(row=1, column=2)
 
+#loops game until it's forced to quit or quit by player
 ws.mainloop()
